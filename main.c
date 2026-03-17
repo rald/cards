@@ -68,13 +68,40 @@ void ShuffleDeck(int deck[],int n) {
 	}
 }
 
-int rank(int card){
-	return (card & 0x3F) % 13;
+int value(int card) {
+	return (card & 0x3F);
 }
 
-int suit(int card){
-	return (card & 0x3F) / 13;
+int rank(int card){
+	return value(card) % 13;
 }
+
+int suit(int card) {
+	return value(card) / 13;
+}
+
+int isRed(int card) {
+	int s=suit(card);
+	if(s==0 || s==1) return 1;
+	return 0;
+}
+
+int isFront(int card) {
+	return (card & 0x40) >> 6;
+}
+
+
+int tongits_cmp(const void *a,const void *b) {
+	int l=*(int*)a;
+	int r=*(int*)b;
+	int sl=suit(l);
+	int sr=suit(r);
+	int rl=rank(l);
+	int rr=rank(r);
+	if(sl!=sr) return sl-sr;
+	return rl-rr;
+}
+
 
 int main(void) {
 	bool quit=false;
@@ -163,6 +190,9 @@ int main(void) {
 	}
 
 
+	qsort(hand[0],nhand[0],sizeof(int),tongits_cmp);
+
+
 	SetMode(0x13);
 	InitPalette();
 
@@ -173,7 +203,7 @@ int main(void) {
 
 		for(j=0;j<3;j++) {
 			for(i=0;i<nhand[j];i++) {
-				k=hand[j][i] & 0x40;
+				k=isFront(hand[j][i]);
 				l=hand[j][i] & 0x3F;
 				if(k) {
 					Canvas_Draw(canvas[l],buf,i*(16+1)+1,j*(16+1)+1);
