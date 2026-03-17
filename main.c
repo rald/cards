@@ -50,12 +50,43 @@ void InitPalette() {
 	}
 }
 
+void InitDeck(int deck[],int *n) {
+	int i;
+	for(i=0;i<52;i++) {
+		deck[i]=i & 0x3F;
+	}
+	*n=52;
+}
+
+void ShuffleDeck(int deck[],int n) {
+	int i,j,k;
+	for(i=n-1;i>=0;i--) {
+		j=rand()%(i+1);
+		k=deck[i];
+		deck[i]=deck[j];
+		deck[j]=k;
+	}
+}
+
+int rank(int card){
+	return (card & 0x3F) % 13;
+}
+
+int suit(int card){
+	return (card & 0x3F) / 13;
+}
+
 int main(void) {
 	bool quit=false;
 	int key;
 	byte *buf=calloc(SCREEN_SIZE,sizeof(*buf));
-	Canvas *canvas[52];
-	int i,j;
+	Canvas *canvas[53];
+	int i,j,k,l;
+	int deck[52];
+	int ndeck=0;
+	int hand[3][13];
+	int nhand[3];
+	int f;
 
 	srand(time(NULL));
 
@@ -115,18 +146,42 @@ int main(void) {
 	canvas[50]=Canvas_Load("cards/qs.cvs");
 	canvas[51]=Canvas_Load("cards/ks.cvs");
 
+	canvas[52]=Canvas_Load("cards/back-00.cvs");
+
+	InitDeck(deck,&ndeck);
+	ShuffleDeck(deck,ndeck);
+
+	f=0;
+	for(j=0;j<3;j++) {
+		nhand[j]=0;
+		if(j==f) k=13; else k=12;
+		for(i=0;i<k;i++) {
+			hand[j][i]=deck[--ndeck];
+			if(j==f) hand[j][i]|=0x40;
+			nhand[j]++;
+		}
+	}
+
+
 	SetMode(0x13);
 	InitPalette();
+
+
 
 	while(!quit) {
 		memset(buf,6,SCREEN_SIZE);
 
-		for(j=0;j<4;j++) {
-			for(i=0;i<13;i++) {
-				Canvas_Draw(canvas[j*13+i],buf,i*(16+1)+1,j*(16+1)+1);
+		for(j=0;j<3;j++) {
+			for(i=0;i<nhand[j];i++) {
+				k=hand[j][i] & 0x40;
+				l=hand[j][i] & 0x3F;
+				if(k) {
+					Canvas_Draw(canvas[l],buf,i*(16+1)+1,j*(16+1)+1);
+				} else {
+					Canvas_Draw(canvas[52],buf,i*(16+1)+1,j*(16+1)+1);
+				}
 			}
 		}
-
 
 		for(i=0;i<16;i++) {
 			FillRect(buf,i*16,SCREEN_HEIGHT-16,16,16,i);
