@@ -123,7 +123,7 @@ int main(void) {
 
 		for(j=0;j<4;j++) {
 			for(i=0;i<13;i++) {
-				Canvas_Draw(canvas[j*13+i],buf,i*(16+1)+1,j*(8+4)+1);
+				Canvas_Draw(canvas[j*13+i],buf,i*(16+1)+1,j*(16+1)+1);
 			}
 		}
 
