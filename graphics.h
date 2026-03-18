@@ -1,6 +1,8 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
+#include "types.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <dos.h>
@@ -12,13 +14,13 @@
 #define INPUT_STATUS_1 0x03DA
 #define VRETRACE       0x08
 
-typedef unsigned char byte;
-typedef unsigned short word;
-typedef unsigned long dword;
-
 void vsync(void);
-void setmode(unsigned char mode);
-void setpalette(byte idx,byte r,byte g,byte b);
+void setMode(unsigned char mode);
+void setPalette(byte idx,byte r,byte g,byte b);
+
+void DrawPoint(byte *srf,int x,int y,int c);
+void FillRect(byte *srf,int x,int y,int w,int h,int c);
+
 
 #endif
 

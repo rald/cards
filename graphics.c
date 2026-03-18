@@ -8,14 +8,14 @@ void vsync(void) {
 	while(!(inp(INPUT_STATUS_1) & VRETRACE));
 }
 
-void SetMode(unsigned char mode) {
+void setMode(unsigned char mode) {
 	union REGS regs;
 	regs.h.ah=0x00;
 	regs.h.al=mode;
 	int86(0x10,&regs,&regs);
 }
 
-void SetPalette(byte idx,byte r,byte g,byte b) {
+void setPalette(byte idx,byte r,byte g,byte b) {
 	outp(0x03c8,idx);
 	outp(0x03c9,r);
 	outp(0x03c9,g);
