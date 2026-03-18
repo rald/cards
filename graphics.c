@@ -3,6 +3,13 @@
 byte *VGA=(byte*)0xA0000000L;
 word *myclock=(word*)0x0000046CL;
 
+bool inrect(int x,int y,int rx,int ry,int rw,int rh) {
+	if(x>=rx && x<=rx+rw && y>=ry && y<=ry+rh) {
+		return true;
+	}
+	return false;
+}
+
 void vsync(void) {
 	while(inp(INPUT_STATUS_1) & VRETRACE);
 	while(!(inp(INPUT_STATUS_1) & VRETRACE));

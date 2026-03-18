@@ -14,7 +14,6 @@ typedef struct {
 	word buttons;
 	bool hold;
 	int hotX,hotY;
-	int dx,dy;
 } Mouse;
 
 Mouse *Mouse_New(char *filename);

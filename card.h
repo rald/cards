@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "canvas.h"
+#include "mouse.h"
 
 #include <stdbool.h>
 

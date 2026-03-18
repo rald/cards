@@ -29,7 +29,7 @@ void Card_Draw(Card *card,byte *srf) {
 }
 
 bool Card_Update(Card *card,Mouse *mouse) {
-	if((mouse->buttons==1 || mouse->buttons==2) && inrect(mouse->x,mouse->y,card->x,card->y,card->canvas->width,card->canvas->height)) {
+	if(mouse->buttons==1 || mouse->buttons==2 && inrect(mouse->x,mouse->y,card->x,card->y,card->canvas->width,card->canvas->height)) {
 		return true;
 	}
 	return false;
